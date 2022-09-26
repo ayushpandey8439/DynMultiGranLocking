@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{theorem}
 \usepackage{xcolor}
+\usepackage{todonotes}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}{Definition}
@@ -17,7 +18,7 @@
 
 \section{Definitions}
 
-Let $G=(V,E)$ be a rooted DAG of $n$ nodes. We denote its root by $r$ and its set of (directed) paths $\mathcal{P}$. For a given path $p\in\mathcal{P}$, we denote its source $s(p)$, its destination $d(p)$ and its length $l(p)$.
+Let $G=(V,E)$ be a rooted DAG of $n$ nodes. We denote its roots by $R$ and its set of (directed) paths $\mathcal{P}$. For a given path $p\in\mathcal{P}$, we denote its source $s(p)$, its destination $d(p)$ and its length $l(p)$.
 
 Given a node $v$, its depht $\delta(v)$ is its distance to the root $r$.
 
@@ -27,32 +28,70 @@ Given a node $v$, its predecessors are the nodes of the set: $P_v=\{u\in V|\exis
 
 Given a node $v$, its ancestors are the nodes of the set: $A_v=\{u\in V|\exists p\in \mathcal{P}, s(p)=v\wedge d(p)=u\}$.
 
-Given a node $v$, its descendents are the nodes of the set: $D_v=\{u\in V|\exists p\in \mathcal{P}, d(p)=v\wedge s(p)=u\}$.
+Given a node $v$, its descendents are the nodes of the set: $D_v=\{u\in V|\exists p\in \mathcal{P},  s(p)=u \wedge d(p)=v\}$.
 
 \subsection{Critical ancestor of a node}
 
-Given a node $v$, its critical ancestors are the nodes of the set: $CA_v=\{u\in A_v|\forall p\in \mathcal{P}, s(p)=r\wedge d(p)=v\Rightarrow u\in p\}$. 
+Given a node $v$, its critical ancestors are the nodes of the set:
+\[
+CA_v=\{u\in A_v|\forall p\in \mathcal{P}, s(p)\in R\wedge d(p)=v\Rightarrow u\in p\}
+\]
 
-Given a node $v$, its lowest critical ancestor (denoted $LCA_v$) is the node $u$ of $CA_v$ satisfying $D_u\cap AC_v=\emptyset$. \textcolor{red}{Is this node necessary unique? Is this definition useful for something?}
+
+\textcolor{red}{Given a node $v$, its lowest critical ancestor (denoted $LCA_v$) is the node $u$ of $CA_v$ satisfying $D_u\cap CA_v=\emptyset$. The lowest critical ancestor is always unique.} \todo{we dont need this definition.}
+
+\subsection{Common critical ancestors of a pair of nodes}
+Given two nodes $u$ and $v$, their common critical ancestors are the nodes of the set:
+\[
+CCA_{u,v} = \{w\in A_u \cap A_v |\forall p\in \mathcal{P}, s(p)\in R\wedge (d(p)=u \lor d(p) = v)\Rightarrow w\in p\}
+\]
+
+This definition can also be summarised as:
+
+\[
+CCA_{u,v} = \{w\in V | w \in CA_u \wedge w \in CA_v\}
+\]
+
+\subsection{Lowest common critical ancestor of a pair of nodes}
+
+Given two nodes $u$ and $v$, their lowest common critical ancestor (denoted $LCCA_{u,v}$) is the node $w$ of $CSA_{u,v}$ satisfying $D_w\cap CA_{u,v}=\emptyset$.
+
 
 \subsection{Lowest common single ancestor of two nodes}
 
-Given two nodes $u$ and $v$, their common ancestors are the nodes of the set: $CA_{u,v}=\{w\in V|(\exists p\in\mathcal{P},s(p)=w\wedge d(p)=v)\wedge(\exists p\in\mathcal{P},s(p)=w\wedge d(p)=u)\}$. \textcolor{red}{equivalent to $CA_{u,v}=A_v\cap A_u$}
+\todo{A few meetings back we decided to give up the term single ancestor. This is because computing the lowest ancestor inherently gives us a single node and calling ancestors common and single was confusing. So we choose the name "lowest common critical ancestor". }
+
+Given two nodes $u$ and $v$, their common ancestors are the nodes of the set:
+
+\[
+CA_{u,v}=\{w\in V|(\exists p\in\mathcal{P},s(p)=w\wedge d(p)=v)\wedge(\exists p\in\mathcal{P},s(p)=w\wedge d(p)=u)\}
+\].
+
+\textcolor{red}{equivalent to $CA_{u,v}=A_v\cap A_u$} \textcolor{orange}{No}
 
 Given two nodes $u$ and $v$, their common single ancestors are the nodes of the set: $CSA_{u,v}=\{w\in CA_{u,v}|(\forall p\in\mathcal{P},s(p)=r\wedge d(p)=u\Rightarrow w\in p)\wedge(\forall p\in\mathcal{P},s(p)=r\wedge d(p)=v\Rightarrow w\in p) \}$.
 
 Given two nodes $u$ and $v$, their lowest common single ancestors (denoted $LCSA_{u,v}$) is the node $w$ of $CSA_{u,v}$ satisfying $D_w\cap CSA_{u,v}=\emptyset$.
 
 \section{Main Property}
-
 {\color{red}
 What is the property between $LCSA_{u,v}$, $CA_u$, and $CA_v$ used by our algorithm?
+
+\color{orange}
+Our algorithm defines for every node the set $CA_u$. We can then use this set to compute the $CCA_{u,v}$ by taking the set intersection as defined earlier.
+
+
+\color{red}
 
 If we can find a relation with the depth, the proof will become easy! Is the following property correct?
 
 Given two nodes $u$ and $v$, $LCSA_{u,v}$ is the node of $CA_u\cap CA_v$ with the highest depth.
 
+\color{orange}
+This is infact correct and except the name. $LCSA_{u,v}$ is $LCCA_{u,v}$
+\color{red}
 We have to prove this property!
+
 }
 
 %\begin{theorem}
@@ -78,11 +117,11 @@ S_v=\begin{cases}
 \textcolor{red}{Association of each node with its depht (for the LCSA computation)?}
 
 %Once done, the Labeling Algorithm returns, for each node $v$, the node $r_v$ of $S_v$ which has the highest depth (also computed during the breadth-first traversal).
- 
+
 \subsection{Proof}
 
 \begin{lemma}
-For each node $v\in V$, the set $S_v$ computed by the Labeling Algorithm is $CA_v$. 
+For each node $v\in V$, the set $S_v$ computed by the Labeling Algorithm is $CA_v$.
 \end{lemma}
 
 \begin{proof}
@@ -103,7 +142,7 @@ Given a rooted DAG $G$ labeled by the Labeling Algorithm, and two nodes $u,v\in 
 \subsection{Proof}
 
 \begin{lemma}
-For each pair of node $u,v\in V$, the node computed by the LCSA Algorithm is $LCSA_{u,v}$. 
+For each pair of node $u,v\in V$, the node computed by the LCSA Algorithm is $LCSA_{u,v}$.
 \end{lemma}
 
 \begin{proof}
