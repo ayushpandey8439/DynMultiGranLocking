@@ -1,0 +1,113 @@
+\documentclass{paper}
+
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{theorem}
+\usepackage{xcolor}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+
+\newenvironment{proof}{{\noindent\bf Proof. } }{{\hfill $\Box$}}
+
+\begin{document}
+
+\section{Definitions}
+
+Let $G=(V,E)$ be a rooted DAG of $n$ nodes. We denote its root by $r$ and its set of (directed) paths $\mathcal{P}$. For a given path $p\in\mathcal{P}$, we denote its source $s(p)$, its destination $d(p)$ and its length $l(p)$.
+
+Given a node $v$, its depht $\delta(v)$ is its distance to the root $r$.
+
+Given a node $v$, its succesors are the nodes of the set: $S_v=\{u\in V|\exists e\in E, e=\{v,u\}\}$.
+
+Given a node $v$, its predecessors are the nodes of the set: $P_v=\{u\in V|\exists e\in E, e=\{u,v\}\}$.
+
+Given a node $v$, its ancestors are the nodes of the set: $A_v=\{u\in V|\exists p\in \mathcal{P}, s(p)=v\wedge d(p)=u\}$.
+
+Given a node $v$, its descendents are the nodes of the set: $D_v=\{u\in V|\exists p\in \mathcal{P}, d(p)=v\wedge s(p)=u\}$.
+
+\subsection{Critical ancestor of a node}
+
+Given a node $v$, its critical ancestors are the nodes of the set: $CA_v=\{u\in A_v|\forall p\in \mathcal{P}, s(p)=r\wedge d(p)=v\Rightarrow u\in p\}$. 
+
+Given a node $v$, its lowest critical ancestor (denoted $LCA_v$) is the node $u$ of $CA_v$ satisfying $D_u\cap AC_v=\emptyset$. \textcolor{red}{Is this node necessary unique? Is this definition useful for something?}
+
+\subsection{Lowest common single ancestor of two nodes}
+
+Given two nodes $u$ and $v$, their common ancestors are the nodes of the set: $CA_{u,v}=\{w\in V|(\exists p\in\mathcal{P},s(p)=w\wedge d(p)=v)\wedge(\exists p\in\mathcal{P},s(p)=w\wedge d(p)=u)\}$. \textcolor{red}{equivalent to $CA_{u,v}=A_v\cap A_u$}
+
+Given two nodes $u$ and $v$, their common single ancestors are the nodes of the set: $CSA_{u,v}=\{w\in CA_{u,v}|(\forall p\in\mathcal{P},s(p)=r\wedge d(p)=u\Rightarrow w\in p)\wedge(\forall p\in\mathcal{P},s(p)=r\wedge d(p)=v\Rightarrow w\in p) \}$.
+
+Given two nodes $u$ and $v$, their lowest common single ancestors (denoted $LCSA_{u,v}$) is the node $w$ of $CSA_{u,v}$ satisfying $D_w\cap CSA_{u,v}=\emptyset$.
+
+\section{Main Property}
+
+{\color{red}
+What is the property between $LCSA_{u,v}$, $CA_u$, and $CA_v$ used by our algorithm?
+
+If we can find a relation with the depth, the proof will become easy! Is the following property correct?
+
+Given two nodes $u$ and $v$, $LCSA_{u,v}$ is the node of $CA_u\cap CA_v$ with the highest depth.
+
+We have to prove this property!
+}
+
+%\begin{theorem}
+%For any two nodes $u$ and $v$ of $V$, $LCSA_{u,v}=LCSA_{LCA_u,LCA_v}$.
+%\end{theorem}
+
+%\begin{proof}
+%TO DO
+%\end{proof}
+
+\section{Labeling Algorithm}
+
+\subsection{Algorithm}
+
+Given a rooted DAG $G$, we compute (with a breadth-first traversal) for each node $v$ a set $S_v$ according to the following rule:
+\[
+S_v=\begin{cases}
+\{v\} \text{ if } v=r\\
+\{v\}\cup\{\cap_{u\in P_v} S_u\} \text{ otherwise}
+\end{cases}
+\]
+
+\textcolor{red}{Association of each node with its depht (for the LCSA computation)?}
+
+%Once done, the Labeling Algorithm returns, for each node $v$, the node $r_v$ of $S_v$ which has the highest depth (also computed during the breadth-first traversal).
+ 
+\subsection{Proof}
+
+\begin{lemma}
+For each node $v\in V$, the set $S_v$ computed by the Labeling Algorithm is $CA_v$. 
+\end{lemma}
+
+\begin{proof}
+\textcolor{red}{TO DO}
+\end{proof}
+
+\section{LCSA Algorithm}
+
+\subsection{Algorithm}
+
+{\color{red}What does exactly this algorithm?
+
+I believe that it is something like that (but I am not really sure):
+
+Given a rooted DAG $G$ labeled by the Labeling Algorithm, and two nodes $u,v\in V$, the LCSA Algorithm returns the node of $S_u\cap S_v$ with the highest depth.
+}
+
+\subsection{Proof}
+
+\begin{lemma}
+For each pair of node $u,v\in V$, the node computed by the LCSA Algorithm is $LCSA_{u,v}$. 
+\end{lemma}
+
+\begin{proof}
+\textcolor{red}{TO DO - easy if the main property is true!}
+\end{proof}
+
+\end{document}
