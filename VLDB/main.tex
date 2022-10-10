@@ -1,0 +1,214 @@
+% VLDB template version of 2020-08-03 enhances the ACM template, version 1.7.0:
+% https://www.acm.org/publications/proceedings-template
+% The ACM Latex guide provides further information about the ACM template
+
+\documentclass[sigconf, nonacm]{acmart}
+
+%% The following content must be adapted for the final version
+% paper-specific
+\newcommand\vldbdoi{XX.XX/XXX.XX}
+\newcommand\vldbpages{XXX-XXX}
+% issue-specific
+\newcommand\vldbvolume{14}
+\newcommand\vldbissue{1}
+\newcommand\vldbyear{2020}
+% should be fine as it is
+\newcommand\vldbauthors{\authors}
+\newcommand\vldbtitle{\shorttitle}
+% leave empty if no availability url should be set
+\newcommand\vldbavailabilityurl{URL_TO_YOUR_ARTIFACTS}
+% whether page numbers should be shown or not, use 'plain' for review versions, 'empty' for camera ready
+\newcommand\vldbpagestyle{plain}
+
+\usepackage{todonotes}
+
+\begin{document}
+\title{Exploiting ancestors for deadlock free transactions in Graph Databases}
+
+%%
+%% The "author" command and its associated commands are used to define the authors and their affiliations.
+\author{Ayush Pandey}
+\affiliation{%
+  \institution{Sorbonne Université/LIP6}
+  \streetaddress{}
+  \city{Paris}
+  \state{France}
+  \postcode{75005}
+}
+\email{ayush.pandey@lip6.fr}
+
+\author{Swan Dubois}
+\affiliation{%
+	\institution{Sorbonne Université/LIP6}
+	\streetaddress{}
+	\city{Paris}
+	\state{France}
+	\postcode{75005}
+}
+\email{swan.dubois@lip6.fr}
+
+\author{Marc Shapiro}
+\affiliation{%
+	\institution{Sorbonne Université/LIP6}
+	\streetaddress{}
+	\city{Paris}
+	\state{France}
+	\postcode{75005}
+}
+\email{marc.shapiro@acm.org}
+
+\author{Julien Sopena}
+\affiliation{%
+	\institution{Sorbonne Université/LIP6}
+	\streetaddress{}
+	\city{Paris}
+	\state{France}
+	\postcode{75005}
+}
+\email{julien.sopena@lip6.fr}
+
+
+%%
+%% The abstract is a short summary of the work to be presented in the
+%% article.
+\begin{abstract}
+\textcolor{red}{TODO}
+\end{abstract}
+
+\maketitle
+
+%%% do not modify the following VLDB block %%
+%%% VLDB block start %%%
+\pagestyle{\vldbpagestyle}
+\begingroup\small\noindent\raggedright\textbf{PVLDB Reference Format:}\\
+\vldbauthors. \vldbtitle. PVLDB, \vldbvolume(\vldbissue): \vldbpages, \vldbyear.\\
+\href{https://doi.org/\vldbdoi}{doi:\vldbdoi}
+\endgroup
+\begingroup
+\renewcommand\thefootnote{}\footnote{\noindent
+This work is licensed under the Creative Commons BY-NC-ND 4.0 International License. Visit \url{https://creativecommons.org/licenses/by-nc-nd/4.0/} to view a copy of this license. For any use beyond those covered by this license, obtain permission by emailing \href{mailto:info@vldb.org}{info@vldb.org}. Copyright is held by the owner/author(s). Publication rights licensed to the VLDB Endowment. \\
+\raggedright Proceedings of the VLDB Endowment, Vol. \vldbvolume, No. \vldbissue\ %
+ISSN 2150-8097. \\
+\href{https://doi.org/\vldbdoi}{doi:\vldbdoi} \\
+}\addtocounter{footnote}{-1}\endgroup
+%%% VLDB block end %%%
+
+%%% do not modify the following VLDB block %%
+%%% VLDB block start %%%
+\ifdefempty{\vldbavailabilityurl}{}{
+\vspace{.3cm}
+\begingroup\small\noindent\raggedright\textbf{PVLDB Artifact Availability:}\\
+The source code, data, and/or other artifacts have been made available at \url{\vldbavailabilityurl}.
+\endgroup
+}
+%%% VLDB block end %%%
+
+\section{Introduction}
+
+Graph databases are becoming ubiquitous for a diverse set of applications. A lot of attention is due to the fact that complex, fine relationships can be represented with ease in graph databases. The ability to represent such relationships opens up the scope for powerful data analysis techniques. A lot of work has been done to make graph databases efficient to query and use for analytics. Languages like Cypher \cite{cypher} provide extensive SQL like semantics for querying the data. However, similar attention has not been paid to make graph databases efficient for OLTP applications.
+
+\section{Problem Scope}
+
+\textcolor{orange}{Define DAGs and the scope of work in terms of the assumptions made for the labelling and how this labelling affects deaclock freedom and tries to minimise the cost. }
+\begin{enumerate}
+	\item Graph databases maintain an index.
+	\item Node access can be optimised.
+	\item Taking a lock in the node can require traversals if intention locks are involved.
+	\item Intention locks are prone to deadlocks.
+	\item If we dont use intention locks and confine to locking with index, we might still run into deadlocks.
+
+\end{enumerate}
+
+\section{Ancestors and special ancestor relationship}
+\textcolor{orange}{In a graph, define what the term ancestor means, how these ancestors are related to a node and the types of ancestors possible. Then proceed to introduce the labelling scheme using ancestors.}
+
+\begin{enumerate}
+	\item Predecessors and ancestors.
+	\item Ancestors common on all the paths to a node and the LSA tree for the graph.
+	\item Labelling the nodes of a graph based on the nodes encountered on the root to n path in the LSA tree.
+\end{enumerate}
+
+
+\subsection{Correctness of the Labelling scheme}
+\textcolor{orange}{With the definitions introduced in the previous section, prove using the paper on new ancestor problems that the strategy works. Use the proof already written}
+
+%\begin{table*}[t]
+%  \caption{A double column table.}
+%  \label{tab:commands}
+%  \begin{tabular}{ccl}
+%    \toprule
+%    A Wide Command Column & A Random Number & Comments\\
+%    \midrule
+%    \verb|\tabular| & 100& The content of a table \\
+%    \verb|\table|  & 300 & For floating tables within a single column\\
+%    \verb|\table*| & 400 & For wider floating tables that span two columns\\
+%    \bottomrule
+%  \end{tabular}
+%\end{table*}
+
+\section{Implementation and Target database used}
+\textcolor{orange}{Introduce Janusgraph and the database properties along with the language used for iterating and managing transactions in the database. Why janusgraph and how the implementation took place.}
+
+\begin{enumerate}
+	\item Explain how labels are maintained as updates happen.
+	\item Locking and transactions in janusgraph
+	\item Locking strategy implemented with ancestor calculation
+	\item Lock pool
+	\item How does this locking compare to standard traversal based locking.
+\end{enumerate}
+
+%
+%\begin{table}[hb]% h asks to places the floating element [h]ere.
+%  \caption{Frequency of Special Characters}
+%  \label{tab:freq}
+%  \begin{tabular}{ccl}
+%    \toprule
+%    Non-English or Math & Frequency & Comments\\
+%    \midrule
+%    \O & 1 in 1000& For Swedish names\\
+%    $\pi$ & 1 in 5 & Common in math\\
+%    \$ & 4 in 5 & Used in business\\
+%    $\Psi^2_1$ & 1 in 40\,000 & Unexplained usage\\
+%  \bottomrule
+%\end{tabular}
+%\end{table}
+
+
+\section{Experimental evaluation}
+
+
+
+%\subsection{Math and Equations}
+%
+%Curabitur vitae nulla dapibus, ornare dolor in, efficitur enim. Cras fermentum facilisis elit vitae egestas. Nam vulputate est non tellus efficitur pharetra. Vestibulum ligula est, varius in suscipit vel, porttitor id massa. Cras facilisis suscipit orci, ac tincidunt erat.
+%\begin{equation}
+%  \lim_{n\rightarrow \infty}x=0
+%\end{equation}
+%
+%Sed pulvinar lobortis dictum. Aliquam dapibus a velit porttitor ultrices. Ut maximus mi id arcu ultricies feugiat. Phasellus facilisis purus ac ipsum varius bibendum. Aenean a quam at massa efficitur tincidunt facilisis sit amet felis.
+%\begin{displaymath}
+%  \sum_{i=0}^{\infty} x + 1
+%\end{displaymath}
+%
+%Suspendisse molestie ultricies tincidunt. Praesent metus ex, tempus quis gravida nec, consequat id arcu. Donec maximus fermentum nulla quis maximus.
+%\begin{equation}
+%  \sum_{i=0}^{\infty}x_i=\int_{0}^{\pi+2} f
+%\end{equation}
+%
+%Curabitur vitae nulla dapibus, ornare dolor in, efficitur enim. Cras fermentum facilisis elit vitae egestas. Nam vulputate est non tellus efficitur pharetra. Vestibulum ligula est, varius in suscipit vel, porttitor id massa. Cras facilisis suscipit orci, ac tincidunt erat.
+%
+%\section{Citations}
+%
+%Some examples of references. A paginated journal article~\cite{Abril07}, an enumerated journal article~\cite{Cohen07}, a reference to an entire issue~\cite{JCohen96}, a monograph (whole book) ~\cite{Kosiur01}, a monograph/whole book in a series (see 2a in spec. document)~\cite{Harel79}, a divisible-book such as an anthology or compilation~\cite{Editor00} followed by the same example, however we only output the series if the volume number is given~\cite{Editor00a} (so Editor00a's series should NOT be present since it has no vol. no.), a chapter in a divisible book~\cite{Spector90}, a chapter in a divisible book in a series~\cite{Douglass98}, a multi-volume work as book~\cite{Knuth97}, an article in a proceedings (of a conference, symposium, workshop for example) (paginated proceedings article)~\cite{Andler79}, a proceedings article with all possible elements~\cite{Smith10}, an example of an enumerated proceedings article~\cite{VanGundy07}, an informally published work~\cite{Harel78}, a doctoral dissertation~\cite{Clarkson85}, a master's thesis~\cite{anisi03}, an finally two online documents or world wide web resources~\cite{Thornburg01, Ablamowicz07}.
+
+%\begin{acks}
+% This work was supported by the [...] Research Fund of [...] (Number [...]). Additional funding was provided by [...] and [...]. We also thank [...] for contributing [...].
+%\end{acks}
+
+%\clearpage
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{bibliography}
+
+\end{document}
+\endinput
